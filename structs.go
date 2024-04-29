@@ -1,5 +1,11 @@
 package unserializd
 
+import "net/http"
+
+type Client struct {
+	httpClient *http.Client
+}
+
 type SerializdDiary struct {
 	Reviews      []Reviews `json:"reviews"`
 	TotalPages   int       `json:"totalPages"`

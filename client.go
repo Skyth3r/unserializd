@@ -1,8 +1,38 @@
 package unserializd
 
-import "net/http"
+import (
+	"net/http"
+	"time"
+)
 
-func setHeaders(r *http.Request, s string) *http.Request {
+var client *Client
+
+func init() {
+	if client != nil {
+		return
+	}
+
+	client = &Client{
+		httpClient: &http.Client{
+			Timeout: time.Second * 10,
+		},
+	}
+}
+
+func NewClient() *Client {
+	return client
+}
+
+func (c *Client) Do(req *http.Request) (*http.Response, error) {
+	c.setHeaders(req, req.URL.String())
+	rsp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return rsp, nil
+}
+
+func (c *Client) setHeaders(r *http.Request, s string) *http.Request {
 	r.Header.Set("Accept", "application/json, text/plain, */*")
 	r.Header.Set("Accept-Encoding", "gzip, deflate, br, zstd")
 	r.Header.Set("Accept-Language", "en-US,en;q=0.9")
