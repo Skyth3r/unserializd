@@ -39,3 +39,16 @@ type ShowSeason struct {
 	SeasonNumber int    `json:"seasonNumber"`
 	PosterPath   string `json:"posterPath"`
 }
+
+type CurrentlyWatching struct {
+	Items      []Items `json:"items"`
+	TotalItems int     `json:"totalItems"`
+	TotalPages int     `json:"totalPages"`
+}
+
+type Items struct {
+	ShowID      int    `json:"showId"`
+	DateAdded   string `json:"dateAdded"`
+	ShowName    string `json:"showName"`
+	BannerImage string `json:"bannerImage"`
+}
