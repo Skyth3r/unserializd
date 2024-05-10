@@ -1,10 +1,8 @@
 package unserializd
 
 import (
-	"compress/gzip"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 )
 
@@ -25,23 +23,7 @@ func (c *Client) Diary(username string) (*SerializdDiary, error) {
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %v", rsp.StatusCode)
-	}
-
-	var reader io.Reader
-	if rsp.Header.Get("Content-Encoding") == "gzip" {
-		gz, err := gzip.NewReader(rsp.Body)
-		if err != nil {
-			return nil, err
-		}
-		defer gz.Close()
-		reader = gz
-	} else {
-		reader = rsp.Body
-	}
-
-	body, err := io.ReadAll(reader)
+	body, err := decodeResponse(rsp)
 	if err != nil {
 		return nil, err
 	}
@@ -76,23 +58,7 @@ func (c *Client) Watching(username string, s SortingOption) (*CurrentlyWatching,
 	}
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %v", rsp.StatusCode)
-	}
-
-	var reader io.Reader
-	if rsp.Header.Get("Content-Encoding") == "gzip" {
-		gz, err := gzip.NewReader(rsp.Body)
-		if err != nil {
-			return nil, err
-		}
-		defer gz.Close()
-		reader = gz
-	} else {
-		reader = rsp.Body
-	}
-
-	body, err := io.ReadAll(reader)
+	body, err := decodeResponse(rsp)
 	if err != nil {
 		return nil, err
 	}
