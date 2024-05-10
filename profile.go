@@ -67,6 +67,37 @@ func (c *Client) Watching(username string, s SortingOption) (*CurrentlyWatching,
 		return nil, err
 	}
 
+	if w.TotalPages == 1 {
+		return &w, nil
+	}
+
+	for i := 2; i <= w.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/currently_watching_page/" + fmt.Sprint(i) + "?sort_by=" + suffix
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp CurrentlyWatching
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		w.Items = append(w.Items, temp.Items...)
+	}
+
 	return &w, nil
 }
 
@@ -100,6 +131,37 @@ func (c *Client) Watched(username string, s SortingOption) (*Watched, error) {
 
 	if err := json.Unmarshal(body, &w); err != nil {
 		return nil, err
+	}
+
+	if w.TotalPages == 1 {
+		return &w, nil
+	}
+
+	for i := 2; i <= w.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/watchedpage_v2/" + fmt.Sprint(i) + "?sort_by=" + suffix
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp Watched
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		w.Items = append(w.Items, temp.Items...)
 	}
 
 	return &w, nil

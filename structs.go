@@ -41,12 +41,12 @@ type ShowSeason struct {
 }
 
 type CurrentlyWatching struct {
-	Items      []Items `json:"items"`
-	TotalItems int     `json:"totalItems"`
-	TotalPages int     `json:"totalPages"`
+	Items      []WatchingItems `json:"items"`
+	TotalItems int             `json:"totalItems"`
+	TotalPages int             `json:"totalPages"`
 }
 
-type Items struct {
+type WatchingItems struct {
 	ShowID      int    `json:"showId"`
 	DateAdded   string `json:"dateAdded"`
 	ShowName    string `json:"showName"`
