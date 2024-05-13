@@ -232,3 +232,70 @@ func (c *Client) Watchlist(username string, s SortingOption) (*Watchlist, error)
 
 	return &w, nil
 }
+
+func (c *Client) Paused(username string, s SortingOption) (*Paused, error) {
+
+	var p Paused
+
+	url := baseUrl + username + "/paused_shows_page/1?sort_by="
+
+	suffix, found := sortingSuffixes[s]
+	if !found {
+		return nil, fmt.Errorf("invalid sorting option: %v", s)
+	}
+	url += suffix
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &p); err != nil {
+		return nil, err
+	}
+
+	if p.TotalPages == 1 {
+		return &p, nil
+	}
+
+	for i := 2; i <= p.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/paused_shows_page/" + fmt.Sprint(i) + "?sort_by=" + suffix
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp Paused
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		p.PausedItems = append(p.PausedItems, temp.PausedItems...)
+	}
+
+	return &p, nil
+
+}

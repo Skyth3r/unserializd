@@ -87,3 +87,16 @@ type WatchlistItems struct {
 	NumberOfSeasons  int    `json:"numSeasons"`
 	NumberOfEpisodes int    `json:"numEpisodes"`
 }
+
+type Paused struct {
+	PausedItems []PausedItems `json:"items"`
+	TotalItems  int           `json:"totalItems"`
+	TotalPages  int           `json:"totalPages"`
+}
+
+type PausedItems struct {
+	ShowID      int    `json:"showId"`
+	ShowName    string `json:"showName"`
+	DateAdded   string `json:"dateAdded"`
+	BannerImage string `json:"bannerImage"`
+}
