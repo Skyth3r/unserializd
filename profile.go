@@ -166,3 +166,69 @@ func (c *Client) Watched(username string, s SortingOption) (*Watched, error) {
 
 	return &w, nil
 }
+
+func (c *Client) Watchlist(username string, s SortingOption) (*Watchlist, error) {
+
+	var w Watchlist
+
+	url := baseUrl + username + "/watchlistpage_v2/1?sort_by="
+
+	suffix, found := sortingSuffixes[s]
+	if !found {
+		return nil, fmt.Errorf("invalid sorting option: %v", s)
+	}
+	url += suffix
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &w); err != nil {
+		return nil, err
+	}
+
+	if w.TotalPages == 1 {
+		return &w, nil
+	}
+
+	for i := 2; i <= w.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/watchlistpage_v2/" + fmt.Sprint(i) + "?sort_by=" + suffix
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp Watchlist
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		w.WatchlistItems = append(w.WatchlistItems, temp.WatchlistItems...)
+	}
+
+	return &w, nil
+}

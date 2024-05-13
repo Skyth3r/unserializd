@@ -70,3 +70,20 @@ type WatchedItems struct {
 	NumberOfEpisodes int    `json:"numEpisodes"`
 	PremierDate      string `json:"premierDate"`
 }
+
+type Watchlist struct {
+	WatchlistItems  []WatchlistItems `json:"items"`
+	TotalPages      int              `json:"totalPages"`
+	NumberOfShows   int              `json:"numberOfShows"`
+	NumberOfSeasons int              `json:"numberOfSeasons"`
+}
+
+type WatchlistItems struct {
+	ShowID           int    `json:"showId"`
+	SeasonIDs        []int  `json:"seasonIds"`
+	DateAdded        string `json:"dateAdded"`
+	ShowName         string `json:"showName"`
+	BannerImage      string `json:"bannerImage"`
+	NumberOfSeasons  int    `json:"numSeasons"`
+	NumberOfEpisodes int    `json:"numEpisodes"`
+}
