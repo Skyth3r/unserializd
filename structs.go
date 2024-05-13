@@ -100,3 +100,16 @@ type PausedItems struct {
 	DateAdded   string `json:"dateAdded"`
 	BannerImage string `json:"bannerImage"`
 }
+
+type Dropped struct {
+	DroppedItems []DroppedItems `json:"items"`
+	TotalItems   int            `json:"totalItems"`
+	TotalPages   int            `json:"totalPages"`
+}
+
+type DroppedItems struct {
+	ShowID      int    `json:"showId"`
+	ShowName    string `json:"showName"`
+	DateAdded   string `json:"dateAdded"`
+	BannerImage string `json:"bannerImage"`
+}
