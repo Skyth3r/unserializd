@@ -113,3 +113,35 @@ type DroppedItem struct {
 	DateAdded   string `json:"dateAdded"`
 	BannerImage string `json:"bannerImage"`
 }
+
+type Reviews struct {
+	ReviewItems []ReviewItem `json:"items"`
+}
+
+type ReviewItem struct {
+	DateAdded           string       `json:"dateAdded"`
+	Rating              int          `json:"rating"`
+	Like                bool         `json:"like"`
+	ID                  int          `json:"id"`
+	ReviewText          string       `json:"reviewText"`
+	SeasonID            int          `json:"seasonId"`
+	ShowID              int          `json:"showId"`
+	Author              string       `json:"author"`
+	AuthorImageUrl      string       `json:"authorImageUrl"`
+	ContainsSpoiler     bool         `json:"containsSpoiler"`
+	BackDate            string       `json:"backdate"`
+	ShowName            string       `json:"showName"`
+	ShowBannerImage     string       `json:"showBannerImage"`
+	ShowSeasons         []ShowSeason `json:"showSeasons"`
+	ShowPremiereDate    string       `json:"showPremiereDate"`
+	NumberOfComments    int          `json:"numComments"`
+	NumberOfLikes       int          `json:"numLikes"`
+	DoesUserHaveComment bool         `json:"doesUserHaveComment"`
+	DoesUserHaveLike    bool         `json:"doesUserHaveLike"`
+	IsRewatch           bool         `json:"isRewatch"`
+	IsLog               bool         `json:"isLog"`
+	EpisodeNumber       int          `json:"episodeNumber"`
+	EpisodeName         string       `json:"episodeName"`
+	Tags                []string     `json:"tags"`
+	LikeCount           int          `json:"likeCount"`
+}

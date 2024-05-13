@@ -8,6 +8,7 @@ import (
 )
 
 type SortingOption int
+type ReviewSortingOption int
 
 const (
 	DateAddedDesc SortingOption = iota
@@ -20,6 +21,17 @@ const (
 	LastAiredAsc
 )
 
+const (
+	WhenWatchedDesc ReviewSortingOption = iota
+	WhenWatchedAsc
+	WhenReviewedDesc
+	WhenReviewedAsc
+	LowestRatingFirst
+	HighestRatingFirst
+	MostLikedFirst
+	LeastLikedFirst
+)
+
 var sortingSuffixes = map[SortingOption]string{
 	DateAddedDesc:   "date_added_desc",
 	DateAddedAsc:    "date_added_asc",
@@ -29,6 +41,17 @@ var sortingSuffixes = map[SortingOption]string{
 	ReleaseDateAsc:  "release_date_asc",
 	LastAiredDesc:   "last_aired_desc",
 	LastAiredAsc:    "last_aired_asc",
+}
+
+var reviewSortingSuffixes = map[ReviewSortingOption]string{
+	WhenWatchedDesc:    "backdate_desc",
+	WhenWatchedAsc:     "backdate_asc",
+	WhenReviewedDesc:   "date_added_desc",
+	WhenReviewedAsc:    "date_added_asc",
+	LowestRatingFirst:  "rating_asc",
+	HighestRatingFirst: "rating_desc",
+	MostLikedFirst:     "like_desc",
+	LeastLikedFirst:    "like_asc",
 }
 
 func decodeResponse(rsp *http.Response) ([]byte, error) {

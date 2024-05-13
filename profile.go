@@ -364,3 +364,52 @@ func (c *Client) Dropped(username string, s SortingOption) (*Dropped, error) {
 
 	return &d, nil
 }
+
+func (c *Client) Reviews(username string, s ReviewSortingOption, includeRatings bool, rating int) (*Reviews, error) {
+
+	var r Reviews
+
+	url := baseUrl + username + "/reviewspage_v3/?sort_by="
+
+	suffix, found := reviewSortingSuffixes[s]
+	if !found {
+		return nil, fmt.Errorf("invalid sorting option: %v", s)
+	}
+	url += suffix
+
+	if !includeRatings {
+		url += "&include_ratings=false"
+	} else {
+		url += "&include_ratings=true"
+	}
+
+	if rating < 0 || rating > 10 {
+		return nil, fmt.Errorf("rating must be between 0 and 10")
+	}
+
+	if rating != 0 {
+		url += "&rating=" + fmt.Sprint(rating)
+	}
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &r); err != nil {
+		return nil, err
+	}
+
+	return &r, nil
+}
