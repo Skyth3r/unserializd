@@ -7,12 +7,12 @@ type Client struct {
 }
 
 type SerializdDiary struct {
-	Reviews      []Reviews `json:"reviews"`
-	TotalPages   int       `json:"totalPages"`
-	TotalReviews int       `json:"totalReviews"`
+	Reviews      []DiaryReviews `json:"reviews"`
+	TotalPages   int            `json:"totalPages"`
+	TotalReviews int            `json:"totalReviews"`
 }
 
-type Reviews struct {
+type DiaryReviews struct {
 	ID               int          `json:"id"`
 	ShowID           int          `json:"showId"`
 	SeasonID         int          `json:"seasonId"`
@@ -41,12 +41,12 @@ type ShowSeason struct {
 }
 
 type CurrentlyWatching struct {
-	Items      []WatchingItems `json:"items"`
-	TotalItems int             `json:"totalItems"`
-	TotalPages int             `json:"totalPages"`
+	Items      []WatchingItem `json:"items"`
+	TotalItems int            `json:"totalItems"`
+	TotalPages int            `json:"totalPages"`
 }
 
-type WatchingItems struct {
+type WatchingItem struct {
 	ShowID      int    `json:"showId"`
 	DateAdded   string `json:"dateAdded"`
 	ShowName    string `json:"showName"`
@@ -54,13 +54,13 @@ type WatchingItems struct {
 }
 
 type Watched struct {
-	Items           []WatchedItems `json:"items"`
-	TotalPages      int            `json:"totalPages"`
-	NumberOfShows   int            `json:"numberOfShows"`
-	NumberOfSeasons int            `json:"numberOfSeasons"`
+	Items           []WatchedItem `json:"items"`
+	TotalPages      int           `json:"totalPages"`
+	NumberOfShows   int           `json:"numberOfShows"`
+	NumberOfSeasons int           `json:"numberOfSeasons"`
 }
 
-type WatchedItems struct {
+type WatchedItem struct {
 	ShowID           int    `json:"showId"`
 	SeasonIDs        []int  `json:"seasonIds"`
 	DateAdded        string `json:"dateAdded"`
@@ -72,13 +72,13 @@ type WatchedItems struct {
 }
 
 type Watchlist struct {
-	WatchlistItems  []WatchlistItems `json:"items"`
-	TotalPages      int              `json:"totalPages"`
-	NumberOfShows   int              `json:"numberOfShows"`
-	NumberOfSeasons int              `json:"numberOfSeasons"`
+	WatchlistItems  []WatchlistItem `json:"items"`
+	TotalPages      int             `json:"totalPages"`
+	NumberOfShows   int             `json:"numberOfShows"`
+	NumberOfSeasons int             `json:"numberOfSeasons"`
 }
 
-type WatchlistItems struct {
+type WatchlistItem struct {
 	ShowID           int    `json:"showId"`
 	SeasonIDs        []int  `json:"seasonIds"`
 	DateAdded        string `json:"dateAdded"`
@@ -89,12 +89,12 @@ type WatchlistItems struct {
 }
 
 type Paused struct {
-	PausedItems []PausedItems `json:"items"`
-	TotalItems  int           `json:"totalItems"`
-	TotalPages  int           `json:"totalPages"`
+	PausedItems []PausedItem `json:"items"`
+	TotalItems  int          `json:"totalItems"`
+	TotalPages  int          `json:"totalPages"`
 }
 
-type PausedItems struct {
+type PausedItem struct {
 	ShowID      int    `json:"showId"`
 	ShowName    string `json:"showName"`
 	DateAdded   string `json:"dateAdded"`
@@ -102,12 +102,12 @@ type PausedItems struct {
 }
 
 type Dropped struct {
-	DroppedItems []DroppedItems `json:"items"`
-	TotalItems   int            `json:"totalItems"`
-	TotalPages   int            `json:"totalPages"`
+	DroppedItems []DroppedItem `json:"items"`
+	TotalItems   int           `json:"totalItems"`
+	TotalPages   int           `json:"totalPages"`
 }
 
-type DroppedItems struct {
+type DroppedItem struct {
 	ShowID      int    `json:"showId"`
 	ShowName    string `json:"showName"`
 	DateAdded   string `json:"dateAdded"`
