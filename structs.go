@@ -118,6 +118,10 @@ type Reviews struct {
 	ReviewItems []ReviewItem `json:"items"`
 }
 
+type PinnedReviews struct {
+	PinnedReviewItems []ReviewItem `json:"reviews"`
+}
+
 type ReviewItem struct {
 	DateAdded           string       `json:"dateAdded"`
 	Rating              int          `json:"rating"`

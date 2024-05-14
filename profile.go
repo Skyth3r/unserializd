@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 )
 
 func (c *Client) Diary(username string) (*SerializdDiary, error) {
@@ -412,4 +413,33 @@ func (c *Client) Reviews(username string, s ReviewSortingOption, includeRatings 
 	}
 
 	return &r, nil
+}
+
+func (c *Client) PinnedReviews(username string) (*PinnedReviews, error) {
+
+	var pr PinnedReviews
+
+	url := baseUrl + username + "/reviews/pinned?page=1&cursor_time=" + time.Now().UTC().Format("2006-01-02T15:04:05.000Z")
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &pr); err != nil {
+		return nil, err
+	}
+
+	return &pr, nil
 }
