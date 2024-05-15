@@ -158,3 +158,48 @@ type Tag struct {
 	Name  string `json:"name"`
 	Count int    `json:"count"`
 }
+
+type CreatedLists struct {
+	Lists      []CreatedList `json:"lists"`
+	TotalPages int           `json:"totalPages"`
+}
+
+type CreatedList struct {
+	ListID          int    `json:"listId"`
+	ListName        string `json:"listName"`
+	ListDescription string `json:"listDescription"`
+	IsPrivate       bool   `json:"isPrivate"`
+	IsRanked        bool   `json:"isRanked"`
+	//ListCollaboratorIDs  []string     `json:"listCollaboratorIds"`
+	LastEditedBy         string       `json:"lastEditedBy"`
+	ListItems            []ListItem   `json:"listItems"`
+	DateCreated          string       `json:"dateCreated"`
+	DateUpdated          string       `json:"dateUpdated"`
+	OwnerID              OwnerDetails `json:"owner"`
+	NumberOfItems        int          `json:"numberOfItems"`
+	LikeCount            int          `json:"likeCount"`
+	DoesUserHaveLike     bool         `json:"doesUserHaveLike"`
+	NotificationsEnabled bool         `json:"notificationsEnabled"`
+	//ListComments           []String     `json:"listComments"`
+	IsUserAllowedToComment bool `json:"isUserAllowedToComment"`
+	AllowsComments         bool `json:"allowsComments"`
+}
+
+type ListItem struct {
+	ShowID        int     `json:"showId"`
+	Position      int     `json:"position"`
+	DateAdded     string  `json:"dateAdded"`
+	ShowName      string  `json:"showName"`
+	BannerImage   string  `json:"bannerImage"`
+	PremierDate   string  `json:"premierDate"`
+	SeasonID      int     `json:"seasonId"`
+	AverageRating float64 `json:"averageRating"`
+	Season        int     `json:"season"`
+	Episode       int     `json:"episode"`
+	Description   string  `json:"description"`
+}
+
+type OwnerDetails struct {
+	Username string `json:"username"`
+	ImageUrl string `json:"imageUrl"`
+}

@@ -472,3 +472,69 @@ func (c *Client) Tags(username string) (*Tags, error) {
 
 	return &t, nil
 }
+
+func (c *Client) CreatedLists(username string, s ListSortingOption) (*CreatedLists, error) {
+
+	var cl CreatedLists
+
+	url := baseUrl + username + "/lists?sort_by="
+
+	suffix, found := listSortingSuffixes[s]
+	if !found {
+		return nil, fmt.Errorf("invalid sorting option: %v", s)
+	}
+	url += suffix + "&page=1"
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &cl); err != nil {
+		return nil, err
+	}
+
+	if cl.TotalPages == 1 {
+		return &cl, nil
+	}
+
+	for i := 2; i <= cl.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/lists?sort_by=" + suffix + "&page=" + fmt.Sprint(i)
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp CreatedLists
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		cl.Lists = append(cl.Lists, temp.Lists...)
+	}
+
+	return &cl, nil
+}
