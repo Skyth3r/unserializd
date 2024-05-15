@@ -443,3 +443,32 @@ func (c *Client) PinnedReviews(username string) (*PinnedReviews, error) {
 
 	return &pr, nil
 }
+
+func (c *Client) Tags(username string) (*Tags, error) {
+
+	var t Tags
+
+	url := baseUrl + username + "/tags"
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &t); err != nil {
+		return nil, err
+	}
+
+	return &t, nil
+}

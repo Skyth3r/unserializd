@@ -149,3 +149,12 @@ type ReviewItem struct {
 	Tags                []string     `json:"tags"`
 	LikeCount           int          `json:"likeCount"`
 }
+
+type Tags struct {
+	Tags []Tag `json:"tags"`
+}
+
+type Tag struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
