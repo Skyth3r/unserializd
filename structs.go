@@ -203,3 +203,16 @@ type OwnerDetails struct {
 	Username string `json:"username"`
 	ImageUrl string `json:"imageUrl"`
 }
+
+type Following struct {
+	Users          []FollowingUser `json:"following"`
+	TotalFollowing int             `json:"totalFollowing"`
+	TotalPages     int             `json:"totalPages"`
+}
+
+type FollowingUser struct {
+	Username    string `json:"username"`
+	DateAdded   string `json:"dateAdded"`
+	Description string `json:"description"`
+	ImagePath   string `json:"imagePath"`
+}

@@ -538,3 +538,63 @@ func (c *Client) CreatedLists(username string, s ListSortingOption) (*CreatedLis
 
 	return &cl, nil
 }
+
+func (c *Client) Following(username string) (*Following, error) {
+
+	var f Following
+
+	url := baseUrl + username + "/following_v2?page=1"
+
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	body, err := decodeResponse(rsp)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(body, &f); err != nil {
+		return nil, err
+	}
+
+	if f.TotalPages == 1 {
+		return &f, nil
+	}
+
+	for i := 2; i <= f.TotalPages; i++ {
+		tempUrl := baseUrl + username + "/following_v2?page=" + fmt.Sprint(i)
+
+		req, err := http.NewRequest("GET", tempUrl, nil)
+		if err != nil {
+			return nil, err
+		}
+
+		rsp, err := c.Do(req)
+		if err != nil {
+			return nil, err
+		}
+		defer rsp.Body.Close()
+
+		body, err := decodeResponse(rsp)
+		if err != nil {
+			return nil, err
+		}
+
+		var temp Following
+		if err := json.Unmarshal(body, &temp); err != nil {
+			return nil, err
+		}
+
+		f.Users = append(f.Users, temp.Users...)
+	}
+
+	return &f, nil
+}
